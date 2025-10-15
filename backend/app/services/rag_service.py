@@ -2,12 +2,29 @@ from __future__ import annotations
 
 from typing import List, Optional, Tuple
 from pathlib import Path
+from io import BytesIO
 
 from langchain.text_splitter import RecursiveCharacterTextSplitter
-from langchain.docstore.document import Document
+from langchain_core.documents import Document
 from langchain_community.vectorstores import Chroma
 from langchain_openai import OpenAIEmbeddings, ChatOpenAI
-from langchain.embeddings import FakeEmbeddings
+
+# Try to import a fake embedding for offline/testing; fallback to a minimal stub
+try:  # langchain-community location
+    from langchain_community.embeddings import FakeEmbeddings as LC_FakeEmbeddings
+except Exception:  # pragma: no cover - fallback for version differences
+    try:
+        from langchain.embeddings import FakeEmbeddings as LC_FakeEmbeddings  # type: ignore
+    except Exception:
+        class LC_FakeEmbeddings:  # minimal stub for tests without OpenAI key
+            def __init__(self, size: int = 1536) -> None:
+                self.size = size
+
+            def embed_documents(self, texts: List[str]) -> List[List[float]]:
+                return [[0.0] * self.size for _ in texts]
+
+            def embed_query(self, text: str) -> List[float]:
+                return [0.0] * self.size
 from pypdf import PdfReader
 
 from ..config import Settings
@@ -22,7 +39,7 @@ class RagService:
         self.embeddings = (
             OpenAIEmbeddings(model=settings.embeddings_model, api_key=settings.openai_api_key)
             if settings.openai_api_key
-            else FakeEmbeddings(size=1536)
+            else LC_FakeEmbeddings(size=1536)
         )
 
         self.vectorstore = Chroma(
@@ -52,7 +69,7 @@ class RagService:
     def _pdf_to_documents(self, file_bytes: bytes, filename: str) -> List[Document]:
         docs: List[Document] = []
         try:
-            reader = PdfReader(stream=file_bytes)
+            reader = PdfReader(BytesIO(file_bytes))
             for page_index, page in enumerate(reader.pages, start=1):
                 try:
                     text = page.extract_text() or ""
