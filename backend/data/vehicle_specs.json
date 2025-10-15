@@ -1,0 +1,26 @@
+[
+  {
+    "make": "Toyota",
+    "model": "Camry",
+    "year": 2018,
+    "engine": "2.5L I4",
+    "transmission": "8-speed automatic",
+    "specs": {
+      "oil_capacity": "4.8 qt",
+      "spark_plug_gap": "0.044 in",
+      "coolant_type": "Toyota Super Long Life Coolant"
+    }
+  },
+  {
+    "make": "Ford",
+    "model": "F-150",
+    "year": 2020,
+    "engine": "3.5L EcoBoost V6",
+    "transmission": "10-speed automatic",
+    "specs": {
+      "oil_capacity": "6.0 qt",
+      "spark_plug_gap": "0.031 in",
+      "coolant_type": "Motorcraft Orange"
+    }
+  }
+]
