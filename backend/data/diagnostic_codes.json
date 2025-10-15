@@ -1,0 +1,45 @@
+[
+  {
+    "code": "P0300",
+    "name": "Random/Multiple Cylinder Misfire Detected",
+    "description": "The PCM has detected multiple misfires across various cylinders.",
+    "symptoms": [
+      "Rough idle",
+      "Hesitation or stumbling",
+      "Reduced fuel economy",
+      "Check Engine Light on"
+    ],
+    "possible_causes": [
+      "Worn spark plugs or ignition components",
+      "Vacuum leaks",
+      "Low fuel pressure or injector issues",
+      "Faulty crankshaft/camshaft position sensors"
+    ],
+    "troubleshooting_steps": [
+      "Pull freeze-frame data and note engine conditions",
+      "Inspect and replace spark plugs as needed",
+      "Check ignition coils and wires for damage",
+      "Perform a smoke test for vacuum leaks",
+      "Measure fuel pressure and injector balance",
+      "Verify crank/cam sensor operation with scan tool"
+    ]
+  },
+  {
+    "code": "P0420",
+    "name": "Catalyst System Efficiency Below Threshold (Bank 1)",
+    "description": "Catalytic converter efficiency is below calibrated threshold.",
+    "symptoms": ["Reduced engine performance", "Check Engine Light on"],
+    "possible_causes": [
+      "Aging/failing catalytic converter",
+      "Exhaust leaks upstream of the converter",
+      "O2 sensor aging or failure",
+      "Engine misfires causing cat damage"
+    ],
+    "troubleshooting_steps": [
+      "Check for exhaust leaks",
+      "Verify O2 sensor switching and bias",
+      "Inspect converter temperature differential",
+      "Check for stored misfire codes and address"
+    ]
+  }
+]
