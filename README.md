@@ -37,7 +37,7 @@ I mastered FastAPI's core design pattern by creating a reusable `get_session()` 
 
 ### 4. Settings & Environment Management
 
-I secured all database credentials by moving them out of the code and into a `.env` file. This is a non-negotiable professional standard. I used `pydantic-settings` to load and validate these environment variables safely at startup.
+I secured all database credentials by moving them out of the code and into a `.env` file. This is a non-negotiable professional standard.
 
 ### 5. Modern App Lifecycle (`lifespan`)
 
