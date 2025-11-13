@@ -60,7 +60,7 @@ if not blog:
 ### Clone the repo:
 
 ```bash
-git clone https://github.com/Divij-8/FastAPI.git
+git clone https://github.com/Divij-8/fastapi-blog-api.git
 cd FastAPI
 ```
 
@@ -86,7 +86,7 @@ pip install "fastapi[all]" sqlmodel psycopg2-binary pydantic-settings python-dot
 ### Run the app (Make sure your Postgres.app server is running!):
 
 ```bash
-uvicorn app.main:app --reload
+uvicorn main:app --reload
 ```
 
 Open the docs and test the live API: http://127.0.0.1:8000/docs
