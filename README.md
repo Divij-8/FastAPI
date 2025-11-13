@@ -6,6 +6,12 @@ This project is the foundational "bootcamp" I completed before starting my first
 
 ### Tech Stack
 
+- **FastAPI**: Modern, fast web framework for building APIs with Python 3.7+ based on standard Python type hints.
+- **PostgreSQL**: Advanced open source relational database.
+- **SQLModel**: Library for interacting with SQL databases from Python code, with Python objects.
+- **Pydantic**: Data validation and settings management using Python type annotations.
+- **Uvicorn**: ASGI web server implementation for Python.
+
 -----
 
 ## Core Concepts I Mastered
@@ -48,7 +54,7 @@ This project taught me that debugging is the *real* job. I fixed several real-wo
 
 1.  **Clone the repo:**
     ```bash
-    git clone https://github.com/divij-8/fastapi.git
+    git clone https://github.com/Divij-8/FastAPI.git
     cd fastapi
     ```
 2.  **Create and activate a virtual environment:**
@@ -68,5 +74,12 @@ This project taught me that debugging is the *real* job. I fixed several real-wo
 
 ### Next Steps
 
-With this C.R.U.D. bootcamp complete, I am now starting on my first major portfolio project: **a full-scale Social Media API** with `JWT` authentication and complex `many-to-many` relationships.
+With this C.R.U.D. bootcamp complete, I am now ready to build production-grade projects. My next step is applying these skills to my first major portfolio piece.
+
+* **Portfolio Project 1: The Social Media API**
+    * I will use these C.R.U.D. skills as a foundation to build a full-scale API with all the features of a "production-ready" service, including:
+    * **JWT Authentication & Security** (for user login/registration).
+    * **A Professional Multi-File Structure** (`routers/`, `models/`, `services/`, etc.).
+    * **Complex `many-to-many` SQL relationships** (for `followers` and `likes`).
+    * **A full `pytest` test suite.**
 
