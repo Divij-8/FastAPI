@@ -1,80 +1,115 @@
-from fastapi import FastAPI, HTTPException, Depends
-from pydantic import BaseModel
-from sqlmodel import SQLModel, Field, create_engine, Session, select
+import os
+from dotenv import load_dotenv
+from typing import Generator, List, Optional
 from contextlib import asynccontextmanager
+import anyio
+from fastapi import FastAPI, HTTPException, Depends, status
+from sqlmodel import SQLModel, Field, create_engine, Session, select
+from pydantic_settings import BaseSettings
+
+load_dotenv()
+
+class Settings(BaseSettings):
+    database_url: str = "postgresql://default_user@localhost/default_db"
+
+settings = Settings()
+
+DATABASE_URL = os.getenv("DATABASE_URL")
+if DATABASE_URL is None:
+    raise ValueError("DATABASE_URL is not set in the .env file. Did you create it?")
+
+
+engine = create_engine(settings.database_url, echo=False)
+
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     print("Starting up... creating database tables.")
-    SQLModel.metadata.create_all(engine)
+    # Run sync SQLModel create_all inside a thread to avoid blocking
+    await anyio.to_thread.run_sync(lambda: SQLModel.metadata.create_all(engine))
     print("Database tables created")
-    yield
+    yield 
     print("Shutting down...")
+
 
 app = FastAPI(lifespan=lifespan)
 
-postgresql_url = "postgresql://divijmazumdar@localhost:5432/postgres"
-engine = create_engine(postgresql_url)
 
-
-def get_session():
+# Dependency that provides a database session for each request
+def get_session() -> Generator[Session, None, None]:
     with Session(engine) as session:
         yield session
 
 
-class Blog(SQLModel, table=True):
-    id: int | None = Field(default=None, primary_key=True)
-    title : str
-    body : str
+# Models
+class BlogBase(SQLModel):
+    title: str
+    body: str
 
 
-@app.post("/blog")
-def create_blog(blog: Blog, session: Session = Depends(get_session)):
+class Blog(BlogBase, table=True):
+    id: Optional[int] = Field(default=None, primary_key=True)
+
+
+class BlogCreate(BlogBase):
+    pass
+
+
+class BlogRead(BlogBase):
+    id: int
+
+
+class BlogUpdate(SQLModel):
+    title: Optional[str] = None
+    body: Optional[str] = None
+
+
+# CRUD endpoints
+@app.post("/blogs", response_model=BlogRead, status_code=status.HTTP_201_CREATED)
+def create_blog(blog_in: BlogCreate, session: Session = Depends(get_session)):
+    blog = Blog.from_orm(blog_in)
     session.add(blog)
     session.commit()
     session.refresh(blog)
     return blog
 
 
-@app.get("/blog/list")
-def get_all_blogs(session: Session = Depends(get_session)):
-    query = select(Blog)
-    blogs = session.exec(query).all()
+@app.get("/blogs", response_model=List[BlogRead])
+def list_blogs(limit: int = 100, offset: int = 0, session: Session = Depends(get_session)):
+    statement = select(Blog).offset(offset).limit(limit)
+    blogs = session.exec(statement).all()
     return blogs
 
 
-@app.get("/blog/{id}")
-def show(id: int, session: Session = Depends(get_session)):
-    #Fetch blog with id = id
-    query = select(Blog).where(Blog.id == id)
-    blog_post = session.exec(query).first()
-    if not blog_post:
-        raise HTTPException(status_code=404,detail=f"blog id {id} not found")
-    return blog_post
+@app.get("/blogs/{blog_id}", response_model=BlogRead)
+def read_blog(blog_id: int, session: Session = Depends(get_session)):
+    blog = session.get(Blog, blog_id)
+    if not blog:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"Blog id {blog_id} not found")
+    return blog
 
-@app.delete("/blog/{id}")
-def delete_blog(id: int, session: Session = Depends(get_session)):
-    query = select(Blog).where(Blog.id == id)
-    blog_to_delete = session.exec(query).first()
-    if not blog_to_delete:
-        raise HTTPException(status_code=404,detail=f"blog id {id} not found")
-    session.delete(blog_to_delete)
+
+@app.put("/blogs/{blog_id}", response_model=BlogRead)
+def update_blog(blog_id: int, blog_in: BlogUpdate, session: Session = Depends(get_session)):
+    blog = session.get(Blog, blog_id)
+    if not blog:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"Blog id {blog_id} not found")
+    if blog_in.title is not None:
+        blog.title = blog_in.title
+    if blog_in.body is not None:
+        blog.body = blog_in.body
+    session.add(blog)
     session.commit()
-    return {"status": "success", "message": f"Blog {id} deleted"}
+    session.refresh(blog)
+    return blog
 
-@app.put("/blog/{id}")
-def update_blog(id: int, blog: Blog, session: Session = Depends(get_session)):
-    id: int
-    blog: Blog
-    query = select(Blog).where(Blog.id == id)
-    blog_to_update = session.exec(query).first()
-    if not blog_to_update:
-        raise HTTPException(status_code=404,detail=f"blog id {id} not found")
-    blog_to_update.title = blog.title
-    blog_to_update.body = blog.body
-    session.add(blog_to_update)
+
+@app.delete("/blogs/{blog_id}", status_code=status.HTTP_200_OK)
+def delete_blog(blog_id: int, session: Session = Depends(get_session)):
+    blog = session.get(Blog, blog_id)
+    if not blog:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"Blog id {blog_id} not found")
+    session.delete(blog)
     session.commit()
-    session.refresh(blog_to_update)
-    return blog_to_update
-
+    return {"status": "success", "message": f"Blog {blog_id} deleted"}
 
