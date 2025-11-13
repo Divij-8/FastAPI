@@ -61,7 +61,7 @@ if not blog:
 
 ```bash
 git clone https://github.com/Divij-8/fastapi-blog-api.git
-cd FastAPI
+cd fastapi-blog-api
 ```
 
 ### Create a .env file in the root directory. (This file should be in your .gitignore).
