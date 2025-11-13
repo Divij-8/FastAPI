@@ -1,8 +1,8 @@
-# FastAPI Professional C.R.U.D. API: My Backend Learning Lab
+# FastAPI C.R.U.D. API: My Backend Learning Lab
 
 This repository documents my journey in mastering professional, production-grade API development. It's the foundational "bootcamp" project I built from scratch to learn the core principles of backend engineering before starting my first major portfolio piece.
 
-The project evolved from a simple in-memory list to a persistent, secure, and robust SQL-backed API built on modern engineering principles.
+The project "Blog API" evolved from a simple in-memory list to a persistent, secure, and robust SQL-backed API built on modern engineering principles.
 
 ## Tech Stack
 
