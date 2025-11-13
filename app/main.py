@@ -5,21 +5,15 @@ from contextlib import asynccontextmanager
 import anyio
 from fastapi import FastAPI, HTTPException, Depends, status
 from sqlmodel import SQLModel, Field, create_engine, Session, select
-from pydantic_settings import BaseSettings
 
 load_dotenv()
-
-class Settings(BaseSettings):
-    database_url: str = "postgresql://default_user@localhost/default_db"
-
-settings = Settings()
 
 DATABASE_URL = os.getenv("DATABASE_URL")
 if DATABASE_URL is None:
     raise ValueError("DATABASE_URL is not set in the .env file. Did you create it?")
 
 
-engine = create_engine(settings.database_url, echo=False)
+engine = create_engine(DATABASE_URL, echo=False)
 
 
 @asynccontextmanager
