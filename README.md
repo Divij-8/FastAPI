@@ -15,7 +15,7 @@ The project "Blog API" evolved from a simple in-memory list to a persistent, sec
 
 ---
 
-## Core Professional Concepts Mastered
+## Core Concepts Mastered
 
 This project was a deep dive into building APIs the *right way*, focusing on security, scalability, and clean code.
 
@@ -29,7 +29,7 @@ This was the most critical concept. I learned *why* you never use your database 
 
 ### 2. True Partial Updates (PATCH Logic)
 
-I implemented a professional `PUT` endpoint that functions as a `PATCH`. It only updates fields that are *explicitly* provided by the user (e.g., `if blog_in.title is not None:`), rather than forcing the user to resend the entire object. This is a critical feature for a good user experience.
+I implemented a `PUT` endpoint that functions as a `PATCH`. It only updates fields that are *explicitly* provided by the user (e.g., `if blog_in.title is not None:`), rather than forcing the user to resend the entire object. This is a critical feature for a good user experience.
 
 ### 3. Dependency Injection (`Depends`)
 
