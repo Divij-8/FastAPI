@@ -15,7 +15,7 @@ The project "Blog API" evolved from a simple in-memory list to a persistent, sec
 
 ---
 
-## Core Professional Concepts Mastered
+## Core Concepts Mastered
 
 This project was a deep dive into building APIs the *right way*, focusing on security, scalability, and clean code.
 
@@ -29,7 +29,7 @@ This was the most critical concept. I learned *why* you never use your database 
 
 ### 2. True Partial Updates (PATCH Logic)
 
-I implemented a professional `PUT` endpoint that functions as a `PATCH`. It only updates fields that are *explicitly* provided by the user (e.g., `if blog_in.title is not None:`), rather than forcing the user to resend the entire object. This is a critical feature for a good user experience.
+I implemented a `PUT` endpoint that functions as a `PATCH`. It only updates fields that are *explicitly* provided by the user (e.g., `if blog_in.title is not None:`), rather than forcing the user to resend the entire object. This is a critical feature for a good user experience.
 
 ### 3. Dependency Injection (`Depends`)
 
@@ -37,7 +37,7 @@ I mastered FastAPI's core design pattern by creating a reusable `get_session()` 
 
 ### 4. Settings & Environment Management
 
-I secured all database credentials by moving them out of the code and into a `.env` file. This is a non-negotiable professional standard. I used `pydantic-settings` to load and validate these environment variables safely at startup.
+I secured all database credentials by moving them out of the code and into a `.env` file. This is a non-negotiable professional standard.
 
 ### 5. Modern App Lifecycle (`lifespan`)
 
@@ -60,8 +60,8 @@ if not blog:
 ### Clone the repo:
 
 ```bash
-git clone https://github.com/Divij-8/FastAPI.git
-cd FastAPI
+git clone https://github.com/Divij-8/fastapi-blog-api.git
+cd fastapi-blog-api
 ```
 
 ### Create a .env file in the root directory. (This file should be in your .gitignore).
@@ -86,7 +86,7 @@ pip install "fastapi[all]" sqlmodel psycopg2-binary pydantic-settings python-dot
 ### Run the app (Make sure your Postgres.app server is running!):
 
 ```bash
-uvicorn app.main:app --reload
+uvicorn main:app --reload
 ```
 
 Open the docs and test the live API: http://127.0.0.1:8000/docs
