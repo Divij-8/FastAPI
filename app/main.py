@@ -61,7 +61,7 @@ class BlogUpdate(SQLModel):
 # CRUD endpoints
 @app.post("/blogs", response_model=BlogRead, status_code=status.HTTP_201_CREATED)
 def create_blog(blog_in: BlogCreate, session: Session = Depends(get_session)):
-    blog = Blog.from_orm(blog_in)
+    blog = Blog.model_validate(blog_in)
     session.add(blog)
     session.commit()
     session.refresh(blog)
